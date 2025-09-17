@@ -41,14 +41,16 @@ public class CompromissoProcessadorCsv {
         }
     }
 
+    public static void writeToCsv(Path path, List<Compromisso> compromissos) throws IOException {
 
-    private static String toCsvLine(Compromisso compromisso) {
-        return String.join(",",
-                escapeCsv(compromisso.getTitulo()),
-                escapeCsv(compromisso.getDescricao()),
-                compromisso.getData().toString(),
-                compromisso.getHora().toString(),
-                String.valueOf(compromisso.getDuracao().toHours()));
+        try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+            writer.write("titulo,descricao,data,hora,duracao");
+            writer.newLine();
+            for (Compromisso compromisso : compromissos) {
+                writer.write(toCsvLine(compromisso));
+                writer.newLine();
+            }
+        }
     }
 
     //Leitura do Csv
@@ -68,7 +70,16 @@ public class CompromissoProcessadorCsv {
         }
     }
 
-    public static Optional<Compromisso> parseCsvLine(String line) {
+    private static String toCsvLine(Compromisso compromisso) {
+        return String.join(",",
+                escapeCsv(compromisso.getTitulo()),
+                escapeCsv(compromisso.getDescricao()),
+                compromisso.getData().toString(),
+                compromisso.getHora().toString(),
+                String.valueOf(compromisso.getDuracao().toHours()));
+    }
+
+    private static Optional<Compromisso> parseCsvLine(String line) {
         try {
             //Aula Ada,parts[0]
             // aula de arquivo,parts[1]

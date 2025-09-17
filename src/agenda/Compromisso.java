@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Objects;
 
 public class Compromisso {
     private String titulo;
@@ -43,6 +44,18 @@ public class Compromisso {
     public Duration getDuracao() {
         return duracao;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Compromisso that)) return false;
+        return Objects.equals(titulo, that.titulo) && Objects.equals(descricao, that.descricao) && Objects.equals(data, that.data) && Objects.equals(hora, that.hora) && Objects.equals(duracao, that.duracao);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(titulo, descricao, data, hora, duracao);
+    }
+
 
     public String toString() {
         return String.format("%s - %s (%s %s, %shr.)", titulo, descricao, data, hora, duracao.toHours());
